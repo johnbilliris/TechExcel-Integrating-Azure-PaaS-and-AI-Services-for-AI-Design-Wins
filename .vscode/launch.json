@@ -1,6 +1,7 @@
 {
   "version": "0.2.0",
   "configurations": [
+    
     {
       "name": "Attach to .NET Functions",
       "type": "coreclr",
@@ -18,6 +19,12 @@
       "console": "internalConsole",
       "stopAtEntry": false     
   },
+  {
+    "name": "Launch ContosoSuitesVectorizationFunction",
+    "type": "coreclr",
+    "request": "attach",
+    "processId": "${command:azureFunctions.pickProcess}"
+},
   {
       "name": "Launch streamlit",
       "type": "debugpy",
