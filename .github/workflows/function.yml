@@ -1,0 +1,52 @@
+name: Deploy Functions to Azure
+
+on:
+  workflow_dispatch:
+
+env:
+  AZURE_FNAPP_NAME: ${{ vars.APP_PREFIX }}-cosu-fn
+
+jobs:
+  build-function:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v2
+
+      - name: Build with dotnet
+        run: dotnet build ./src/ContosoSuitesVectorizationFunction.csproj --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish ./src/ContosoSuitesVectorizationFunction.csproj --configuration Release -o ./src/ContosoSuitesVectorizationFunction/ContosoSuitesVectorizationFunction
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v3
+        with:
+          name: ContosoSuitesVectorizationFunction
+          path: ./functions/ContosoSuitesVectorizationFunction/ContosoSuitesVectorizationFunction
+          retention-days: 1
+
+  deploy-function:
+    runs-on: ubuntu-latest
+    needs: [ build-function ]
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v3
+        with:
+          name: ContosoSuitesVectorizationFunction
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_FNAPP_NAME }}
+          package: .
