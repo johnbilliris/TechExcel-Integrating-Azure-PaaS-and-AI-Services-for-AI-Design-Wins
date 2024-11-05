@@ -17,16 +17,16 @@ jobs:
         uses: actions/setup-dotnet@v2
 
       - name: Build with dotnet
-        run: dotnet build ./src/ContosoSuitesVectorizationFunction.csproj --configuration Release
+        run: dotnet build ./src/ContosoSuitesVectorizationFunction/ContosoSuitesVectorizationFunction.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish ./src/ContosoSuitesVectorizationFunction.csproj --configuration Release -o ./src/ContosoSuitesVectorizationFunction/ContosoSuitesVectorizationFunction
+        run: dotnet publish ./src/ContosoSuitesVectorizationFunction/ContosoSuitesVectorizationFunction.csproj --configuration Release -o ./src/ContosoSuitesVectorizationFunction/output
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: ContosoSuitesVectorizationFunction
-          path: ./functions/ContosoSuitesVectorizationFunction/ContosoSuitesVectorizationFunction
+          path: ./src/ContosoSuitesVectorizationFunction/output
           retention-days: 1
 
   deploy-function:
