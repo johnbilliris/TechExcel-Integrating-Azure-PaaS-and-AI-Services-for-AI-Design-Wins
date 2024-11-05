@@ -1,0 +1,15 @@
+az login
+az account set --subscription "c8703ebc-bc5d-488d-9489-5883c9fde6c2"
+az group create --location eastus2 --name rg-techexcel
+az deployment group create --resource-group rg-techexcel --template-file DeployAzureResources.bicep 
+
+
+
+az group delete --name rg-techexcel --yes
+
+
+
+
+# Exercise 01
+# Task 03
+az ad sp create-for-rbac --name "TechExcelAzurePaaS" --json-auth --role contributor --scopes /subscriptions/c8703ebc-bc5d-488d-9489-5883c9fde6c2/resourceGroups/rg-techexcel
