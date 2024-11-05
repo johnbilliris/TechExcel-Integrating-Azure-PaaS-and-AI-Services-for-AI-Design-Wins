@@ -33,6 +33,6 @@ jobs:
         id: fa
         with:
           app-name: ${{ env.AZURE_FNAPP_NAME }}
-          package: '${{ env.AZURE_FNAPP_NAME }}/output'
+          package: './output'
 
   
